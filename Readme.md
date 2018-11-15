@@ -1,3 +1,10 @@
+<!-- default file list -->
+*Files to look at*:
+
+* [DataModel.cs](./CS/InstantFeedbackMode/DataModel.cs) (VB: [DataModel.vb](./VB/InstantFeedbackMode/DataModel.vb))
+* [MainWindow.xaml](./CS/InstantFeedbackMode/MainWindow.xaml) (VB: [MainWindow.xaml](./VB/InstantFeedbackMode/MainWindow.xaml))
+* [MainWindow.xaml.cs](./CS/InstantFeedbackMode/MainWindow.xaml.cs) (VB: [MainWindow.xaml](./VB/InstantFeedbackMode/MainWindow.xaml))
+<!-- default file list end -->
 # How to Implement the Instant Feedback Mode (XPO)
 
 
