@@ -1,30 +1,26 @@
-﻿Imports System
+Imports System
 Imports System.Windows
-Imports DevExpress.Data.Filtering
-Imports DevExpress.Xpf.Grid
 Imports DevExpress.Xpo
-Imports DevExpress.Xpf.Core
 
 Namespace InstantFeedbackMode
+
     ''' <summary>
     ''' Interaction logic for MainWindow.xaml
     ''' </summary>
-    Partial Public Class MainWindow
+    Public Partial Class MainWindow
         Inherits Window
 
         Public Sub New()
-            InitDAL()
+            Call InitDAL()
             ' Generates test data - 100,000 records.
             GenerateTestData(100000)
-            InitializeComponent()
-
+            Me.InitializeComponent()
             ' Creates and initializes the data source which activates the Instant Feedback UI Mode.
-            Dim instantDS As New XPInstantFeedbackSource(GetType(TestObject))
-            AddHandler instantDS.ResolveSession, AddressOf instantDS_ResolveSession
-            AddHandler instantDS.DismissSession, AddressOf instantDS_DismissSession
-
+            Dim instantDS As XPInstantFeedbackSource = New XPInstantFeedbackSource(GetType(TestObject))
+            AddHandler instantDS.ResolveSession, New EventHandler(Of ResolveSessionEventArgs)(AddressOf instantDS_ResolveSession)
+            AddHandler instantDS.DismissSession, New EventHandler(Of ResolveSessionEventArgs)(AddressOf instantDS_DismissSession)
             ' Bind the grid.
-            grid.ItemsSource = instantDS
+            Me.grid.ItemsSource = instantDS
         End Sub
 
         Private Sub instantDS_ResolveSession(ByVal sender As Object, ByVal e As ResolveSessionEventArgs)
@@ -40,17 +36,16 @@ Namespace InstantFeedbackMode
 
         Private Shared Sub InitDAL()
             XpoDefault.Session = Nothing
-            XpoDefault.DataLayer = XpoDefault.GetDataLayer(DevExpress.Xpo.DB.AccessConnectionProvider.GetConnectionString("test.mdb"), DevExpress.Xpo.DB.AutoCreateOption.DatabaseAndSchema)
+            XpoDefault.DataLayer = XpoDefault.GetDataLayer(DB.AccessConnectionProvider.GetConnectionString("test.mdb"), DB.AutoCreateOption.DatabaseAndSchema)
         End Sub
 
         Private Sub GenerateTestData(ByVal recordCount As Integer)
-            Using s As New UnitOfWork()
-                If s.FindObject(Of TestObject)(Nothing) IsNot Nothing Then
-                    Return
-                End If
+            Using s As UnitOfWork = New UnitOfWork()
+                If s.FindObject(Of TestObject)(Nothing) IsNot Nothing Then Return
                 For i As Integer = 0 To recordCount - 1
-                    Dim o As New TestObject(s) With {.HasAttachment = False, .Sent = Date.Now, .Subject = String.Format("Subject {0}", i)}
-                Next i
+                    Dim o As TestObject = New TestObject(s) With {.HasAttachment = False, .Sent = Date.Now, .Subject = String.Format("Subject {0}", i)}
+                Next
+
                 s.CommitChanges()
             End Using
         End Sub
